@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Web.UI.WebControls;
 
 public partial class Admin : BasePage
@@ -72,6 +73,13 @@ public partial class Admin : BasePage
         {
             TopicTitle.Text = row["Title"].ToString();
             TopicDescription.Text = row["Description"].ToString();
+            string image = row["ImagePath"].ToString();
+            if (image.Length > 0)
+            {
+                CurrentImage.ImageUrl = image;
+                CurrentImage.AlternateText = row["Title"].ToString() + " image";
+                CurrentImage.Visible = true;
+            }
         }
         if (Mode == "lessons")
         {
@@ -120,6 +128,35 @@ public partial class Admin : BasePage
         return Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Topics WHERE Id=@p0", id)) == 1;
     }
 
+    static readonly string[] AllowedImageTypes = { ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp" };
+
+    bool TrySaveTopicImage(out string imagePath, out string error)
+    {
+        imagePath = null;
+        error = null;
+        if (!TopicImage.HasFile) return true;
+
+        if (TopicImage.PostedFile.ContentLength > 2 * 1024 * 1024)
+        {
+            error = "The image must be 2 MB or smaller.";
+            return false;
+        }
+
+        string extension = Path.GetExtension(TopicImage.FileName).ToLowerInvariant();
+        if (Array.IndexOf(AllowedImageTypes, extension) < 0)
+        {
+            error = "Use a PNG, JPG, GIF, SVG or WEBP image.";
+            return false;
+        }
+
+        string fileName = "topic-" + Guid.NewGuid().ToString("N") + extension;
+        string folder = Server.MapPath("~/assets");
+        Directory.CreateDirectory(folder);
+        TopicImage.SaveAs(Path.Combine(folder, fileName));
+        imagePath = "assets/" + fileName;
+        return true;
+    }
+
     void Saved()
     {
         Go("Admin.aspx?mode=" + Mode + "&saved=1");
@@ -144,11 +181,25 @@ public partial class Admin : BasePage
             return;
         }
 
+        string uploadedImage;
+        string imageError;
+        if (!TrySaveTopicImage(out uploadedImage, out imageError))
+        {
+            Message(imageError, true);
+            return;
+        }
+
         try
         {
             if (EditId > 0)
             {
-                if (Db.Run("UPDATE Topics SET Title=@p0,Description=@p1 WHERE Id=@p2", title, description, EditId) == 0)
+                string updateSql = uploadedImage == null
+                    ? "UPDATE Topics SET Title=@p0,Description=@p1 WHERE Id=@p2"
+                    : "UPDATE Topics SET Title=@p0,Description=@p1,ImagePath=@p3 WHERE Id=@p2";
+                int changed = uploadedImage == null
+                    ? Db.Run(updateSql, title, description, EditId)
+                    : Db.Run(updateSql, title, description, EditId, uploadedImage);
+                if (changed == 0)
                 {
                     Message("Topic not found.", true);
                     return;
@@ -156,7 +207,7 @@ public partial class Admin : BasePage
             }
             else
             {
-                Db.Run("INSERT INTO Topics(Title,Description,ImagePath) VALUES(@p0,@p1,@p2)", title, description, "assets/topic.svg");
+                Db.Run("INSERT INTO Topics(Title,Description,ImagePath) VALUES(@p0,@p1,@p2)", title, description, uploadedImage ?? "assets/topic.svg");
             }
 
             Saved();

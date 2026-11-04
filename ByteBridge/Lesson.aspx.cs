@@ -9,7 +9,7 @@ public partial class Lesson : BasePage
     protected void Page_Load(object sender, EventArgs e)
     {
         lessonId = Number(Request.QueryString["id"]);
-        DataTable rows = Db.Table("SELECT l.*,t.Title AS PathTitle,t.ImagePath FROM Lessons l JOIN Topics t ON l.TopicId=t.Id WHERE l.Id=@p0", lessonId);
+        DataTable rows = Db.Table("SELECT l.*,t.Title AS PathTitle FROM Lessons l JOIN Topics t ON l.TopicId=t.Id WHERE l.Id=@p0", lessonId);
         if (rows.Rows.Count == 0)
         {
             LessonPanel.Visible = false;
@@ -21,8 +21,6 @@ public partial class Lesson : BasePage
         PathTitle.Text = row["PathTitle"].ToString();
         LessonTitle.Text = row["Title"].ToString();
         Summary.Text = row["Summary"].ToString();
-        Illustration.ImageUrl = row["ImagePath"].ToString();
-        Illustration.AlternateText = row["PathTitle"].ToString() + " illustration";
         MemberContent.Visible = SignedIn;
         CompletePanel.Visible = SignedIn;
         PreviewPanel.Visible = !SignedIn;

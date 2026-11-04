@@ -15,7 +15,7 @@
 </head>
 <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <form id="MainForm" runat="server">
+    <form id="MainForm" runat="server" enctype="multipart/form-data">
         <asp:HiddenField ID="CsrfToken" runat="server" />
         <header class="site-header">
             <div class="container header-row">
@@ -100,6 +100,12 @@
                     <div class="field">
                         <asp:Label runat="server" AssociatedControlID="TopicDescription" Text="Description" />
                         <asp:TextBox ID="TopicDescription" runat="server" TextMode="MultiLine" ValidateRequestMode="Disabled" Rows="4" />
+                    </div>
+                    <div class="field">
+                        <asp:Label runat="server" AssociatedControlID="TopicImage" Text="Topic image (optional)" />
+                        <asp:FileUpload ID="TopicImage" runat="server" accept=".png,.jpg,.jpeg,.gif,.svg,.webp" />
+                        <asp:Image ID="CurrentImage" runat="server" Visible="false" CssClass="topic-image" Width="96" Height="96" />
+                        <p class="muted">PNG, JPG, GIF, SVG or WEBP up to 2 MB</p>
                     </div>
                     <asp:Button ID="SaveTopic" runat="server" Text="Save topic" OnClick="SaveTopic_Click" />
                 </asp:Panel>

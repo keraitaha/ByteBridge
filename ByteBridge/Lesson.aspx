@@ -67,10 +67,6 @@
                     <p class="notice">
                         <asp:Literal ID="Reminder" runat="server" Mode="Encode" /></p>
                 </asp:Panel>
-                <figure>
-                    <asp:Image ID="Illustration" runat="server" Width="120" Height="120" />
-                    <figcaption>Connect the concept to the code above.</figcaption>
-                </figure>
                 <asp:Panel ID="PreviewPanel" runat="server" CssClass="notice">
                     <p>This is a lesson preview. Log in for the full explanation and code.</p>
                     <a href="Login.aspx" class="button">Log in to continue</a>
