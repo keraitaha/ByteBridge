@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bytebridge>
+  <topics>
+    <topic id="1" title="HTML &amp; CSS" description="Build your first web pages and style them clearly." image="assets/html.svg" />
+    <topic id="2" title="C# &amp; .NET" description="Learn beginner C# syntax and how .NET websites work." image="assets/csharp.svg" />
+    <topic id="3" title="SQL &amp; Databases" description="Understand tables and simple commands for stored data." image="assets/sql.svg" />
+    <topic id="4" title="JavaScript Essentials" description="Add small, useful interactions without a framework." image="assets/topic.svg" />
+  </topics>
+  <lessons>
+    <lesson id="1" topicId="1" order="1" prerequisiteId="">
+      <title>HTML Page Structure</title>
+      <summary>Learn headings, paragraphs and semantic sections.</summary>
+      <body><![CDATA[Objective: identify basic HTML elements and describe a semantic page.
+
+HTML provides the structure of a website. A heading names a section, a paragraph holds text and a link takes a reader to another page. Semantic tags describe the role of content.]]></body>
+      <code><![CDATA[<header>My website</header>
+<main><h1>Welcome</h1><p>Hello world.</p></main>
+<footer>Contact details</footer>]]></code>
+      <reminder><![CDATA[<main> contains the primary content of the page.]]></reminder>
+    </lesson>
+    <lesson id="2" topicId="1" order="2" prerequisiteId="1">
+      <title>CSS Selectors and Styling</title>
+      <summary>Use classes and properties to style HTML.</summary>
+      <body><![CDATA[Objective: explain a CSS selector and apply color and spacing.
+
+CSS changes how HTML looks. A class can be reused on many elements, and CSS rules contain properties and values. Put most CSS in an external stylesheet for easier maintenance.]]></body>
+      <code><![CDATA[.card {
+    background: white;
+    color: navy;
+    padding: 16px;
+}]]></code>
+      <reminder>A class selector starts with a dot.</reminder>
+    </lesson>
+    <lesson id="3" topicId="2" order="1" prerequisiteId="">
+      <title>C# Variables and Types</title>
+      <summary>Store simple values with int, string and bool.</summary>
+      <body><![CDATA[Objective: declare variables and choose a suitable C# type.
+
+A variable stores a value. Use int for a whole number, string for text and bool for true or false. C# checks types to help catch mistakes.]]></body>
+      <code><![CDATA[int lessonCount = 6;
+string student = "Alex";
+bool isComplete = false;]]></code>
+      <reminder>C# statements normally end with a semicolon.</reminder>
+    </lesson>
+    <lesson id="4" topicId="2" order="2" prerequisiteId="3">
+      <title>Models, Views and Controllers</title>
+      <summary>Compare MVC with a Web Forms page and its code-behind.</summary>
+      <body><![CDATA[Objective: identify the role of each MVC part and distinguish MVC from Web Forms.
+
+A Model represents data, a View displays HTML and a Controller responds to a request. In an MVC application a controller can read Topics from the database and pass the list to a Razor View. The first example below demonstrates that MVC pattern.
+
+ASP.NET Web Forms uses a different page model. Its .aspx file contains markup, while its .aspx.cs code-behind handles Page_Load and button events. The second example demonstrates Web Forms; it is an alternative to the MVC controller, not another part of it. Both approaches benefit from keeping display markup separate from database work.]]></body>
+      <code><![CDATA[// MVC comparison: controller action
+public ActionResult Index()
+{
+    return View(db.Topics.ToList());
+}
+
+// Web Forms alternative: page code-behind
+protected void Page_Load(object sender, EventArgs e)
+{
+    if (!IsPostBack)
+    {
+        TopicList.DataSource = Db.Table("SELECT * FROM Topics");
+        TopicList.DataBind();
+    }
+}]]></code>
+      <reminder>Keep markup in the display file. MVC controllers and Web Forms code-behind are different page models.</reminder>
+    </lesson>
+    <lesson id="5" topicId="3" order="1" prerequisiteId="">
+      <title>Tables and Keys</title>
+      <summary>Understand rows, columns and primary keys.</summary>
+      <body><![CDATA[Objective: explain records, fields and primary keys.
+
+A database table contains rows and columns. A primary key identifies each row. A foreign key connects a record to another table.]]></body>
+      <code><![CDATA[Topic: Id, Title
+Lesson: Id, TopicId, Title
+
+Lesson.TopicId points to Topic.Id.]]></code>
+      <reminder>Relationships make it possible to show lessons for a selected topic.</reminder>
+    </lesson>
+    <lesson id="6" topicId="3" order="2" prerequisiteId="5">
+      <title>Basic SELECT/INSERT/UPDATE/DELETE</title>
+      <summary>Practice the four common SQL data operations.</summary>
+      <body><![CDATA[Objective: name the four main database operations.
+
+SELECT reads records. INSERT adds records. UPDATE changes existing records. DELETE removes records. Use WHERE carefully when updating or deleting.]]></body>
+      <code><![CDATA[SELECT * FROM Topics;
+INSERT INTO Topics (Title, Description) VALUES ('Basics', 'Starting out');
+UPDATE Topics SET Title='Intro' WHERE Id=1;
+DELETE FROM Topics WHERE Id=1;]]></code>
+      <reminder>Always check the WHERE condition before changing multiple rows.</reminder>
+    </lesson>
+    <lesson id="7" topicId="1" order="3" prerequisiteId="2">
+      <title>Forms That People Can Use</title>
+      <summary>Connect labels, input controls and a clear action.</summary>
+      <body><![CDATA[Objective: describe a Web Forms input and explain why its label and ID matter.
+
+A form collects information. A label names the input, and a button says what will happen. In Web Forms, runat="server" makes a control available to C# code-behind. The ID is the name used to read its value, such as NoteTitle.Text. AssociatedControlID connects an ASP.NET label to its input, including the generated browser ID.
+
+Required fields and length limits help people enter valid information. The server must still check the submitted values before saving them. A clearly named Save note button is easier to understand than a vague Submit button.]]></body>
+      <code><![CDATA[<form id="MainForm" runat="server">
+  <asp:Label ID="TitleLabel" runat="server"
+      AssociatedControlID="NoteTitle" Text="Note title" />
+  <asp:TextBox ID="NoteTitle" runat="server" MaxLength="100" />
+  <asp:Button ID="SaveButton" runat="server"
+      Text="Save note" OnClick="Save_Click" />
+</form>]]></code>
+      <reminder>A helpful browser form improves usability; server validation decides whether data may be saved.</reminder>
+    </lesson>
+    <lesson id="8" topicId="1" order="4" prerequisiteId="7">
+      <title>Layout With Flex and Grid</title>
+      <summary>Arrange navigation and cards with a few reusable rules.</summary>
+      <body><![CDATA[Objective: choose a simple layout tool for a row or a set of columns.
+
+Flexbox arranges items along a row or column. It suits a navigation bar or a row of buttons. Grid arranges a set of items into columns and rows, so it suits learning-path cards. A gap adds space between items without putting margins on each child.
+
+Reusable class names let different pages use the same layout. minmax(0, 1fr) lets a grid column shrink without forcing the whole page wider. A narrow code example can still scroll inside its own box with overflow-x: auto.]]></body>
+      <code><![CDATA[.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+pre { overflow-x: auto; }]]></code>
+      <reminder>Use flex for a simple row or column and grid for a group of aligned columns.</reminder>
+    </lesson>
+    <lesson id="9" topicId="1" order="5" prerequisiteId="8">
+      <title>Designing for Phones and Keyboards</title>
+      <summary>Use media queries, readable spacing and visible focus.</summary>
+      <body><![CDATA[Objective: explain a phone-specific layout and a keyboard focus indicator.
+
+A media query applies rules only when its condition matches. A phone can use a single study column, a compact menu and fixed bottom navigation instead of a miniature desktop header. Leave space under the page so that fixed navigation does not cover the final button.
+
+Touch targets need room to tap. Keyboard users need to see which link or control has focus. Keep labels visible, allow text to wrap, and preserve the browser's zoom. CSS custom properties such as --blue let the same colour be changed in one place.]]></body>
+      <code><![CDATA[:root { --blue: #2563eb; }
+:focus-visible { outline: 3px solid var(--blue); }
+@media (max-width: 700px) {
+    .cards { grid-template-columns: 1fr; }
+    .phone-nav { position: fixed; bottom: 0; }
+    body { padding-bottom: 80px; }
+}
+button { min-height: 44px; }]]></code>
+      <reminder>A phone layout changes the arrangement and controls, not just the scale of the desktop page.</reminder>
+    </lesson>
+    <lesson id="10" topicId="2" order="3" prerequisiteId="4">
+      <title>A Page Load and a Button Click</title>
+      <summary>Follow the two common events in Web Forms code-behind.</summary>
+      <body><![CDATA[Objective: explain the first page load, a postback and a click event.
+
+The Page directive connects a .aspx file to its .aspx.cs CodeFile and partial class. ASP.NET also generates the control declarations, so the page can refer to controls by ID. Page_Load runs when the page is requested and also on a postback. A postback submits the server form to the same page.
+
+IsPostBack tells us whether this is a submitted form. Populate an initial list inside if (!IsPostBack) so it does not overwrite a selection before a click handler reads it. OnClick="Save_Click" connects a markup button to its C# handler. The handler can validate, save and show a message.
+
+A Repeater uses its ItemTemplate as the repeated markup. Its ItemDataBound event can copy each DataRow's values into labels and links without putting C# expressions in the markup. Encode stored text before showing it as HTML. Redirecting after a successful action sends the browser to another page; a clear return link brings the learner back to the list.]]></body>
+      <code><![CDATA[protected void Page_Load(object sender, EventArgs e)
+{
+    if (!IsPostBack)
+    {
+        TopicList.DataSource = Db.Table("SELECT * FROM Topics");
+        TopicList.DataBind();
+    }
+}
+
+protected void Save_Click(object sender, EventArgs e)
+{
+    Message("Your changes were saved.");
+}]]></code>
+      <reminder>Initial page setup and a submitted button action are different moments in the request.</reminder>
+    </lesson>
+    <lesson id="11" topicId="2" order="4" prerequisiteId="10">
+      <title>Small Checks and Reusable Helpers</title>
+      <summary>Use conditions, loops and methods to keep actions readable.</summary>
+      <body><![CDATA[Objective: read a validation guard and identify a small shared method.
+
+An if statement chooses whether a block runs. A guard checks for a problem early and returns before any database change. Trim removes leading and trailing spaces; Length counts characters. A loop repeats a small operation for each item, such as displaying every lesson or checking every quiz answer.
+
+A method gives a repeated task a name. Page classes can inherit simple shared methods from BasePage. For example, Message displays feedback and Number parses a query-string ID. int.TryParse reports whether text is a valid integer without throwing for ordinary invalid input. A try/catch can turn an expected database conflict into a useful message. Small helpers reduce repetition without hiding the main sequence of validate, save and display.
+
+A static helper belongs to the class, rather than to one page object. Shared startup can use a lock while creating its database so that two first requests do not initialize it at once. This is setup coordination, not another learning feature.]]></body>
+      <code><![CDATA[string title = NoteTitle.Text.Trim();
+if (title.Length == 0 || title.Length > 100)
+{
+    Message("Enter a title of 1 to 100 characters.", true);
+    return;
+}
+
+for (int index = 0; index < 3; index++)
+{
+    // Run this block three times.
+}]]></code>
+      <reminder>Check invalid input before saving, and keep each helper's purpose easy to state.</reminder>
+    </lesson>
+    <lesson id="12" topicId="2" order="5" prerequisiteId="11">
+      <title>Knowing Who Can Do What</title>
+      <summary>Separate login identity, page state and permission checks.</summary>
+      <body><![CDATA[Objective: distinguish authentication, authorization and temporary form state.
+
+Authentication identifies a signed-in account. A forms-authentication cookie contains a protected ticket; the server uses that identity to load the current user's ID and role. Authorization decides whether that account may perform an action. RequireLogin protects member actions; RequireAdmin protects content management. Hiding a link is not a permission check.
+
+Passwords are verified using a salted hash rather than stored as readable text. A salt is random data stored with the hash. Rfc2898DeriveBytes repeatedly derives bytes from the password and salt using PBKDF2, making mass guessing more expensive. Convert.ToBase64String represents those bytes as storable text; it is an encoding, not the password protection itself. At login, derive a value again using the saved salt and compare it with the saved hash.
+
+Session holds temporary server-side values such as a form token. ViewState helps Web Forms restore control state on postback; it is not a user account. A per-session form token and ViewStateUserKey help reject forged submissions. Never put a password or a quiz answer key in a browser script.]]></body>
+      <code><![CDATA[protected void Page_Load(object sender, EventArgs e)
+{
+    RequireLogin();
+}
+
+protected void Delete_Click(object sender, EventArgs e)
+{
+    RequireAdmin();
+    // Validate the record before deleting it.
+}
+
+// Shared page setup binds viewstate to the session.
+ViewStateUserKey = Session.SessionID;]]></code>
+      <reminder>The server must check permissions on the action, even when navigation already hides the action.</reminder>
+    </lesson>
+    <lesson id="13" topicId="2" order="6" prerequisiteId="12">
+      <title>Checking Answers and Building a Skill</title>
+      <summary>Trace scoring, distinct practice successes and prerequisites.</summary>
+      <body><![CDATA[Objective: explain why the server checks answers and how a practice tree records progress.
+
+A quiz submission contains selected choices, not a trusted score. When a quiz opens, the server keeps a private snapshot of its questions and correct options in Session, under a random key. ViewState carries only the key, not the answer table. Before grading, the page compares the current question IDs, wording, options and correct answers with that snapshot. If a question changed or the session expired, the learner must reload rather than have old selections marked against edited content. Successful grading requires every answer, saves the server-calculated result with the user's ID and date, then removes the temporary snapshot. A later attempt is another row, so history is retained.
+
+Practice exercises work similarly. Trim the submitted token and compare it with the stored answer. These short-token checks use Ordinal and require the spelling and capitalisation shown in the lesson. This keeps C# and JavaScript identifiers and CSS class names accurate. SQL itself often allows keyword case variants; these exercises deliberately use one canonical spelling. Record the attempt and show an explanation. A first correct exercise earns points; repeating it does not earn them again. A skill becomes practised after its distinct checks and an explanation review are complete. The next skill checks its prerequisite's status. This records practice, not guaranteed memory: explain the reason aloud and revisit weak ideas.]]></body>
+      <code><![CDATA[int score = 0;
+foreach (DataRow question in questions.Rows)
+{
+    if (chosenAnswer == question["CorrectOption"].ToString())
+    {
+        score++;
+    }
+}
+
+bool correct = string.Equals(submitted.Trim(), expected.Trim(), StringComparison.Ordinal);
+// Award new points only if this exercise was not already correct.]]></code>
+      <reminder>Correct answers are checked on the server; progress should count distinct skills rather than repeated guesses.</reminder>
+    </lesson>
+    <lesson id="14" topicId="3" order="3" prerequisiteId="6">
+      <title>Passing Values to SQL Safely</title>
+      <summary>Read a parameterized query and an ADO.NET helper call.</summary>
+      <body><![CDATA[Objective: separate an SQL command from the values supplied by a form.
+
+Do not join typed text directly into an SQL command. A parameter is a named placeholder such as @p0. The ADO.NET command sends the value separately, so an apostrophe is treated as data rather than part of the command. Parameterization protects the query structure; it does not replace length or permission checks.
+
+Db.Table returns matching rows in a DataTable. Db.Value returns one value, such as a count. Db.Run runs a change, and Db.Add can return an inserted identity. These small helpers open a SqlConnection, create a SqlCommand, add parameters and dispose the connection with using. ExecuteNonQuery returns the number of changed rows; ExecuteScalar returns one value. A SqlDataAdapter can fill a DataTable for a list.
+
+A connection string selects the LocalDB instance and the local App_Data database file. Integrated Security uses the Windows account running the local application instead of a password written in the connection string. A using block releases the connection even if the operation fails.]]></body>
+      <code><![CDATA[DataTable notes = Db.Table(
+    "SELECT * FROM Notes WHERE UserId=@p0", UserId);
+
+Db.Run("UPDATE Notes SET Title=@p0 WHERE Id=@p1 AND UserId=@p2",
+    title, noteId, UserId);
+
+// Inside the helper, values stay separate from SQL text.
+command.Parameters.AddWithValue("@p0", UserId);]]></code>
+      <reminder>SQL text describes the operation; parameters carry the values.</reminder>
+    </lesson>
+    <lesson id="15" topicId="3" order="4" prerequisiteId="14">
+      <title>Keeping Personal Records Personal</title>
+      <summary>Filter reads, updates and deletes by the signed-in owner.</summary>
+      <body><![CDATA[Objective: explain why a personal record query needs both its ID and its owner.
+
+An ID identifies a note but does not prove who owns it. The server must take UserId from the authenticated account, not from a hidden form field. Read only that user's records. For edit and delete, match both the record ID and UserId so a guessed ID cannot change someone else's note.
+
+When creating a note or flashcard, assign the current user in code. Keep CreatedAt unchanged during an edit. An optional lesson or topic link can be NULL, but a supplied link must refer to a real record. If an owner-filtered update changes zero rows, report that the record was not found rather than exposing another person's content.]]></body>
+      <code><![CDATA[DataTable ownNotes = Db.Table(
+    "SELECT * FROM Notes WHERE UserId=@p0", UserId);
+
+int changed = Db.Run(
+    "DELETE FROM Notes WHERE Id=@p0 AND UserId=@p1",
+    noteId, UserId);
+
+if (changed == 0)
+{
+    Message("Note not found.", true);
+}]]></code>
+      <reminder>Identity comes from the signed-in session; a submitted record ID is only a request to find a record.</reminder>
+    </lesson>
+    <lesson id="16" topicId="3" order="5" prerequisiteId="15">
+      <title>Relationships That Protect Saved Work</title>
+      <summary>Use constraints and linked-delete checks to avoid broken records.</summary>
+      <body><![CDATA[Objective: explain an identity, a unique rule and a foreign-key restriction.
+
+An IDENTITY column generates a new number for an inserted row. A UNIQUE rule prevents duplicates, such as two accounts with the same email or two progress rows for one user and lesson. A foreign key requires a referenced topic, lesson or user to exist.
+
+Deleting a lesson with progress would leave saved work pointing nowhere. Check related records before deleting and show a useful explanation. The database foreign key is a second line of protection. Delete only a record that is safe to remove, and preserve failed-operation feedback. Keep the .mdf and its transaction log in App_Data; closing the app does not erase stored rows.
+
+Initial setup creates the tables from a schema script and loads starting topics, lessons and exercises from XML. XML elements name fields and attributes carry IDs; CDATA keeps teaching code as plain content. The schema, seed rows and example accounts use one SqlTransaction on one connection. Commit keeps them together; if setup fails before that point, disposal rolls back the changes. A later request can retry rather than use a partly seeded schema. Initialization should happen once for a new database, not overwrite a student's work on every page visit. Back up a local database before changing its schema.]]></body>
+      <code><![CDATA[Id int IDENTITY(1,1) PRIMARY KEY,
+TopicId int NOT NULL REFERENCES Topics(Id)
+
+-- One completion record per learner and lesson:
+UNIQUE (UserId, LessonId)
+
+-- Count related progress before considering a lesson delete:
+SELECT COUNT(*) FROM Progress WHERE LessonId=@p0;]]></code>
+      <reminder>Application checks explain the problem; database constraints protect the relationship.</reminder>
+    </lesson>
+    <lesson id="17" topicId="4" order="1" prerequisiteId="">
+      <title>Finding an Element and Changing Text</title>
+      <summary>Use the DOM for a small, safe page update.</summary>
+      <body><![CDATA[Objective: select an element and replace its text without inserting markup.
+
+The browser represents a page as a Document Object Model, or DOM. querySelector finds the first element matching a CSS selector. A dot selects a class; a hash selects an ID. Check that an element exists before trying to use it, because the same shared script can run on several pages.
+
+textContent changes plain text. It is a good choice for a counter or a status message because typed angle brackets remain text. innerHTML interprets text as markup and should not be used to display untrusted input. Load the external script with defer so the markup is parsed before the script runs.]]></body>
+      <code><![CDATA[const status = document.querySelector('.study-status');
+if (status) {
+    status.textContent = 'Ready to practise.';
+}
+
+// In the .aspx head:
+// <script src="scripts/site.js" defer></script>]]></code>
+      <reminder>Select the element, check it exists, then make the smallest useful change.</reminder>
+    </lesson>
+    <lesson id="18" topicId="4" order="2" prerequisiteId="17">
+      <title>Responding to a Click</title>
+      <summary>Connect an event listener to a helpful page interaction.</summary>
+      <body><![CDATA[Objective: explain when an event callback runs and what preventDefault changes.
+
+addEventListener attaches a function that runs when an event happens. A click listener runs when someone activates a button. The function is passed as an argument; do not call it while attaching it. A button inside a form normally submits it unless its type is button.
+
+preventDefault cancels the browser's usual action, such as following a link or submitting a form. Only cancel when there is a reason, such as the person declining a delete confirmation. Returning from a callback alone does not cancel the browser action. JavaScript feedback improves usability, but a server button handler still performs validation and saving.]]></body>
+      <code><![CDATA[const button = document.querySelector('.delete-action');
+if (button) {
+    button.addEventListener('click', function (event) {
+        if (!confirm('Delete this record?')) {
+            event.preventDefault();
+        }
+    });
+}]]></code>
+      <reminder>An event listener reacts to a later action; it does not save database data by itself.</reminder>
+    </lesson>
+    <lesson id="19" topicId="4" order="3" prerequisiteId="18">
+      <title>One Script for Several Pages</title>
+      <summary>Use data attributes and a small loop instead of repeated scripts.</summary>
+      <body><![CDATA[Objective: read a data attribute and apply one behaviour to matching controls.
+
+A data attribute stores a small instruction on an HTML element, such as the confirmation text for a delete button. querySelectorAll finds every matching element. forEach runs a callback once for each match. This lets a single scripts/site.js file support notes, flashcards and admin pages without copying code into every .aspx file.
+
+dataset.confirm reads data-confirm. The value is a convenience for browser behaviour, not a security rule. A visitor can change browser attributes, so C# must still check the current user, the record and any database relationships before deleting.]]></body>
+      <code><![CDATA[document.querySelectorAll('[data-confirm]').forEach(function (button) {
+    button.addEventListener('click', function (event) {
+        if (!confirm(button.dataset.confirm)) {
+            event.preventDefault();
+        }
+    });
+});
+
+// Markup example: data-confirm="Delete this note?" ]]></code>
+      <reminder>Share a small behaviour through data attributes; keep permission checks on the server.</reminder>
+    </lesson>
+    <lesson id="20" topicId="4" order="4" prerequisiteId="19">
+      <title>Useful Features Without Extra Code</title>
+      <summary>Prefer built-in HTML behaviour, then enhance it carefully.</summary>
+      <body><![CDATA[Objective: explain progressive enhancement using a revealable answer and a return link.
+
+The details element already knows how to reveal content when its summary is activated. A flashcard can therefore offer Recall, then reveal without custom animation or a JavaScript library. It remains usable if a script does not load. A normal link with a real destination is also a dependable back-to-list action.
+
+Progressive enhancement starts with working HTML and server forms, then adds small conveniences. Use JavaScript only where it helps, such as confirming deletion or updating text. Keep keyboard focus visible, choose clear button text and do not make understanding depend on a colour or animation. Explain both the built-in behaviour and the optional enhancement.]]></body>
+      <code><![CDATA[<details>
+  <summary>Reveal answer</summary>
+  <p>CSS controls presentation.</p>
+</details>
+
+<a href="Flashcards.aspx">Back to flashcards</a>]]></code>
+      <reminder>The simplest interaction is often one the browser already provides.</reminder>
+    </lesson>
+  </lessons>
+  <questions>
+    <question id="1" topicId="1" answer="A"><prompt>Which HTML tag contains the main page content?</prompt><a><![CDATA[<main>]]></a><b><![CDATA[<style>]]></b><c><![CDATA[<title>]]></c><d><![CDATA[<meta>]]></d></question>
+    <question id="2" topicId="1" answer="B"><prompt>Which HTML element is used for a paragraph?</prompt><a><![CDATA[<div>]]></a><b><![CDATA[<p>]]></b><c><![CDATA[<img>]]></c><d><![CDATA[<ul>]]></d></question>
+    <question id="3" topicId="1" answer="C"><prompt>Which selector targets class card?</prompt><a>#card</a><b>card</b><c>.card</c><d>*card</d></question>
+    <question id="4" topicId="1" answer="D"><prompt>Which HTML element links to an external stylesheet?</prompt><a><![CDATA[<script>]]></a><b><![CDATA[<label>]]></b><c><![CDATA[<footer>]]></c><d><![CDATA[<link>]]></d></question>
+    <question id="5" topicId="2" answer="A"><prompt>Which C# type stores a whole number?</prompt><a>int</a><b>string</b><c>bool</c><d>char[]</d></question>
+    <question id="6" topicId="2" answer="B"><prompt>Which symbol ends a normal C# statement?</prompt><a>:</a><b>;</b><c>/</c><d>#</d></question>
+    <question id="7" topicId="2" answer="C"><prompt>Which MVC part displays a Razor page?</prompt><a>Model</a><b>Controller</b><c>View</c><d>Database</d></question>
+    <question id="8" topicId="2" answer="D"><prompt>Which MVC part responds to a browser request?</prompt><a>View</a><b>CSS</b><c>Table</c><d>Controller</d></question>
+    <question id="9" topicId="3" answer="A"><prompt>Which key uniquely identifies a table row?</prompt><a>Primary key</a><b>Foreign key</b><c>Password</c><d>CSS class</d></question>
+    <question id="10" topicId="3" answer="B"><prompt>Which SQL command reads rows?</prompt><a>INSERT</a><b>SELECT</b><c>DELETE</c><d>UPDATE</d></question>
+    <question id="11" topicId="3" answer="C"><prompt>Which SQL command changes existing data?</prompt><a>SELECT</a><b>INSERT</b><c>UPDATE</c><d>CREATE</d></question>
+    <question id="12" topicId="3" answer="D"><prompt>Which SQL command removes rows?</prompt><a>SELECT</a><b>JOIN</b><c>INSERT</c><d>DELETE</d></question>
+    <question id="13" topicId="4" answer="A"><prompt>Which method finds the first matching DOM element?</prompt><a>querySelector</a><b>SaveChanges</b><c>SELECT</c><d>Page_Load</d></question>
+    <question id="14" topicId="4" answer="B"><prompt>Which property updates an element using plain text?</prompt><a>innerHTML</a><b>textContent</b><c>OnClick</c><d>class</d></question>
+    <question id="15" topicId="4" answer="C"><prompt>Which event method cancels a form or link's normal action?</prompt><a>DataBind</a><b>querySelectorAll</b><c>preventDefault</c><d>Trim</d></question>
+    <question id="16" topicId="4" answer="D"><prompt>Where must permission to delete a saved record be enforced?</prompt><a>Only in a hidden link</a><b>Only in CSS</b><c>Only in a confirmation box</c><d>On the server</d></question>
+  </questions>
+  <exercises>
+    <exercise id="1" lessonId="1" order="1"><prompt>Fill the blank with the semantic tag name for the page's primary content.</prompt><starter><![CDATA[<____><h1>Welcome</h1></____>]]></starter><answer>main</answer><explanation>The main element identifies the primary content, separate from navigation and repeated footer content.</explanation></exercise>
+    <exercise id="2" lessonId="1" order="2"><prompt>Fill the blank with the tag name for a paragraph.</prompt><starter><![CDATA[<____>My first lesson.</____>]]></starter><answer>p</answer><explanation>The p element marks a paragraph; headings and sections serve different roles.</explanation></exercise>
+    <exercise id="3" lessonId="1" order="3"><prompt>Fill the blank with the attribute that gives a link its destination.</prompt><starter><![CDATA[<a ____="Paths.aspx">Learning paths</a>]]></starter><answer>href</answer><explanation>The href attribute supplies the destination address used when the link is activated.</explanation></exercise>
+    <exercise id="4" lessonId="2" order="1"><prompt>Complete the selector for elements with class card, including its prefix.</prompt><starter><![CDATA[____ { padding: 16px; }]]></starter><answer>.card</answer><explanation>A class selector begins with a dot; #card would select an ID instead.</explanation></exercise>
+    <exercise id="5" lessonId="2" order="2"><prompt>Which CSS property sets the inner space between content and its border?</prompt><starter><![CDATA[.card { ____: 16px; }]]></starter><answer>padding</answer><explanation>Padding is inside the border. Margin provides space outside it.</explanation></exercise>
+    <exercise id="6" lessonId="2" order="3"><prompt>Fill the blank with the tag name used to connect an external stylesheet.</prompt><starter><![CDATA[<____ rel="stylesheet" href="styles/site.css">]]></starter><answer>link</answer><explanation>A link element with rel="stylesheet" connects the page to its external CSS file.</explanation></exercise>
+    <exercise id="7" lessonId="3" order="1"><prompt>Choose the C# type for a whole-number lesson count.</prompt><starter><![CDATA[____ lessonCount = 6;]]></starter><answer>int</answer><explanation>int stores whole numbers such as a count or an ID.</explanation></exercise>
+    <exercise id="8" lessonId="3" order="2"><prompt>Choose the C# type for a learner's text name.</prompt><starter><![CDATA[____ student = "Alex";]]></starter><answer>string</answer><explanation>string stores text; the quotation marks delimit the text value.</explanation></exercise>
+    <exercise id="9" lessonId="3" order="3"><prompt>Choose the C# type for a true-or-false completion flag.</prompt><starter><![CDATA[____ isComplete = false;]]></starter><answer>bool</answer><explanation>bool has the values true and false, useful for checks and state flags.</explanation></exercise>
+    <exercise id="10" lessonId="4" order="1"><prompt>Which MVC part displays a Razor page? Enter its singular name.</prompt><starter><![CDATA[Model = data; ____ = display; Controller = requests.]]></starter><answer>View</answer><explanation>The View displays the page in MVC. Web Forms instead uses an .aspx page and its code-behind.</explanation></exercise>
+    <exercise id="11" lessonId="4" order="2"><prompt>Complete the common Web Forms event handler name for loading a page.</prompt><starter><![CDATA[protected void ____(object sender, EventArgs e) { }]]></starter><answer>Page_Load</answer><explanation>Page_Load is a Web Forms page event; it is not an MVC controller action.</explanation></exercise>
+    <exercise id="12" lessonId="4" order="3"><prompt>Fill the blank with the Web Forms Page directive attribute connecting the code-behind file.</prompt><starter><![CDATA[<%@ Page Language="C#" ____="Paths.aspx.cs" Inherits="Paths" %>]]></starter><answer>CodeFile</answer><explanation>CodeFile points to the .aspx.cs code-behind in this Web Site project model.</explanation></exercise>
+    <exercise id="13" lessonId="5" order="1"><prompt>Complete the SQL keyword before KEY that marks the row's unique identifying key.</prompt><starter><![CDATA[Id int ____ KEY]]></starter><answer>PRIMARY</answer><explanation>A primary key identifies one row and cannot be NULL or duplicated.</explanation></exercise>
+    <exercise id="14" lessonId="5" order="2"><prompt>Fill the blank with the lesson column that refers to its topic.</prompt><starter><![CDATA[Lessons.____ points to Topics.Id]]></starter><answer>TopicId</answer><explanation>TopicId is a foreign key linking a lesson to the owning topic record.</explanation></exercise>
+    <exercise id="15" lessonId="5" order="3"><prompt>Complete the SQL relationship keyword before KEY for a reference to another table.</prompt><starter><![CDATA[____ KEY (TopicId) REFERENCES Topics(Id)]]></starter><answer>FOREIGN</answer><explanation>A foreign key makes the relationship explicit and requires the referenced record to exist.</explanation></exercise>
+    <exercise id="16" lessonId="6" order="1"><prompt>Fill the blank with the SQL command that reads rows.</prompt><starter><![CDATA[____ * FROM Topics;]]></starter><answer>SELECT</answer><explanation>SELECT reads stored records without changing them.</explanation></exercise>
+    <exercise id="17" lessonId="6" order="2"><prompt>Fill the blank with the SQL command that changes an existing title.</prompt><starter><![CDATA[____ Topics SET Title='Intro' WHERE Id=1;]]></starter><answer>UPDATE</answer><explanation>UPDATE changes existing rows; the WHERE condition restricts which rows are changed.</explanation></exercise>
+    <exercise id="18" lessonId="6" order="3"><prompt>Fill the blank with the SQL command that removes the selected row.</prompt><starter><![CDATA[____ FROM Topics WHERE Id=1;]]></starter><answer>DELETE</answer><explanation>DELETE removes rows. Always verify its WHERE condition and any related records first.</explanation></exercise>
+    <exercise id="19" lessonId="7" order="1"><prompt>Complete the attribute that makes this Web Forms input available to the server.</prompt><starter><![CDATA[<asp:TextBox ID="NoteTitle" ____="server" />]]></starter><answer>runat</answer><explanation>runat="server" makes the control available by ID in C# code-behind.</explanation></exercise>
+    <exercise id="20" lessonId="7" order="2"><prompt>Complete the label property that connects it to the NoteTitle input.</prompt><starter><![CDATA[<asp:Label runat="server" ____="NoteTitle" Text="Title" />]]></starter><answer>AssociatedControlID</answer><explanation>AssociatedControlID links a Web Forms label to the input, helping both pointer and assistive-technology users.</explanation></exercise>
+    <exercise id="21" lessonId="7" order="3"><prompt>Complete the button property that names the code-behind click handler.</prompt><starter><![CDATA[<asp:Button runat="server" Text="Save" ____="Save_Click" />]]></starter><answer>OnClick</answer><explanation>OnClick connects the button's server event to the named method in its code-behind.</explanation></exercise>
+    <exercise id="22" lessonId="8" order="1"><prompt>Complete the display value commonly used for a row of action buttons.</prompt><starter><![CDATA[.actions { display: ____; flex-wrap: wrap; }]]></starter><answer>flex</answer><explanation>Flexbox arranges items along a row or column and can wrap them when space is limited.</explanation></exercise>
+    <exercise id="23" lessonId="8" order="2"><prompt>Complete the display value that enables grid-template-columns.</prompt><starter><![CDATA[.cards { display: ____; grid-template-columns: 1fr 1fr; }]]></starter><answer>grid</answer><explanation>Grid enables a layout of explicit columns and rows.</explanation></exercise>
+    <exercise id="24" lessonId="8" order="3"><prompt>Which CSS property adds space between flex or grid children?</prompt><starter><![CDATA[.cards { display: grid; ____: 20px; }]]></starter><answer>gap</answer><explanation>gap spaces the items in a grid or flex container without needing margins on each child.</explanation></exercise>
+    <exercise id="25" lessonId="9" order="1"><prompt>Complete the at-rule name used for a screen-width condition, without its @ prefix.</prompt><starter><![CDATA[@____ (max-width: 700px) { .cards { grid-template-columns: 1fr; } }]]></starter><answer>media</answer><explanation>A media query applies its CSS only when the specified condition matches.</explanation></exercise>
+    <exercise id="26" lessonId="9" order="2"><prompt>Complete the position value that keeps phone navigation at the viewport bottom.</prompt><starter><![CDATA[.phone-nav { position: ____; bottom: 0; }]]></starter><answer>fixed</answer><explanation>Fixed positioning anchors the navigation to the viewport; page padding prevents it covering the last content.</explanation></exercise>
+    <exercise id="27" lessonId="9" order="3"><prompt>Complete the pseudo-class name used for a visible keyboard focus outline, without the colon.</prompt><starter><![CDATA[:____ { outline: 3px solid blue; }]]></starter><answer>focus-visible</answer><explanation>focus-visible lets a keyboard user see which element will receive the next action.</explanation></exercise>
+    <exercise id="28" lessonId="10" order="1"><prompt>Complete the property that tells a Web Forms page whether this request submitted its form.</prompt><starter><![CDATA[if (!____) { LoadTopics(); }]]></starter><answer>IsPostBack</answer><explanation>IsPostBack is false for the initial load and true when the page receives its submitted server form.</explanation></exercise>
+    <exercise id="29" lessonId="10" order="2"><prompt>Complete the method that binds the assigned DataSource to a Repeater.</prompt><starter><![CDATA[TopicList.DataSource = Db.Table("SELECT * FROM Topics");
+TopicList.____();]]></starter><answer>DataBind</answer><explanation>DataBind asks the control to create its displayed items from the assigned data.</explanation></exercise>
+    <exercise id="30" lessonId="10" order="3"><prompt>Complete the return type for a click handler that returns no value.</prompt><starter><![CDATA[protected ____ Save_Click(object sender, EventArgs e) { }]]></starter><answer>void</answer><explanation>A void method performs work but does not return a result value.</explanation></exercise>
+    <exercise id="31" lessonId="11" order="1"><prompt>Complete the string method that removes spaces at the beginning and end.</prompt><starter><![CDATA[string title = NoteTitle.Text.____();]]></starter><answer>Trim</answer><explanation>Trim prevents a title made only from surrounding spaces from being treated as useful text.</explanation></exercise>
+    <exercise id="32" lessonId="11" order="2"><prompt>Complete the statement that leaves the method before a database save.</prompt><starter><![CDATA[if (title.Length == 0) { Message("Enter a title.", true); ____; }]]></starter><answer>return</answer><explanation>return exits the current method, so code below the invalid-input guard will not run.</explanation></exercise>
+    <exercise id="33" lessonId="11" order="3"><prompt>Complete the loop keyword for the shown counter-controlled repetition.</prompt><starter><![CDATA[____ (int index = 0; index < 3; index++) { }]]></starter><answer>for</answer><explanation>A for loop combines initialization, a continuation condition and an update to the counter.</explanation></exercise>
+    <exercise id="34" lessonId="12" order="1"><prompt>Complete the shared page method that protects an administrator action.</prompt><starter><![CDATA[protected void Delete_Click(object sender, EventArgs e) {
+    ____();
+}]]></starter><answer>RequireAdmin</answer><explanation>RequireAdmin checks the current account's role on the server before an administrator action proceeds.</explanation></exercise>
+    <exercise id="35" lessonId="12" order="2"><prompt>Complete the server-side collection used here for a temporary form token.</prompt><starter><![CDATA[____["FormToken"] = token;]]></starter><answer>Session</answer><explanation>Session stores temporary per-session server values; it is different from permanent database records.</explanation></exercise>
+    <exercise id="36" lessonId="12" order="3"><prompt>Complete the page property that binds viewstate validation to the current session.</prompt><starter><![CDATA[____ = Session.SessionID;]]></starter><answer>ViewStateUserKey</answer><explanation>Setting ViewStateUserKey early in the page lifecycle ties the viewstate validation to this session.</explanation></exercise>
+    <exercise id="37" lessonId="13" order="1"><prompt>Complete the variable name incremented after a correct quiz answer.</prompt><starter><![CDATA[int score = 0;
+if (correct) { ____++; }]]></starter><answer>score</answer><explanation>The server computes score by counting validated correct choices instead of trusting a submitted total.</explanation></exercise>
+    <exercise id="38" lessonId="13" order="2"><prompt>Complete the comparison option that preserves letter case for C# and JavaScript exercise answers.</prompt><starter><![CDATA[string.Equals(submitted.Trim(), expected.Trim(), StringComparison.____)]]></starter><answer>Ordinal</answer><explanation>Ordinal compares the characters exactly, including letter case. Every practice check uses exact spelling from the example. SQL often permits keyword case variants in real queries, but these short checks use a canonical answer.</explanation></exercise>
+    <exercise id="39" lessonId="13" order="3"><prompt>Complete the SQL keyword that counts each correctly solved exercise ID only once.</prompt><starter><![CDATA[SELECT COUNT(____ ExerciseId) FROM PracticeAttempts
+WHERE UserId=@p0 AND Correct=1;]]></starter><answer>DISTINCT</answer><explanation>DISTINCT removes duplicate exercise IDs, so repeating one successful exercise does not create new skill points.</explanation></exercise>
+    <exercise id="40" lessonId="14" order="1"><prompt>Complete the parameter placeholder that receives the first value in this Db helper call.</prompt><starter><![CDATA[Db.Table("SELECT * FROM Notes WHERE UserId=____", UserId);]]></starter><answer>@p0</answer><explanation>The helper names its first parameter @p0 and sends the value separately from the SQL text.</explanation></exercise>
+    <exercise id="41" lessonId="14" order="2"><prompt>Complete the Db helper name that returns a table of selected rows.</prompt><starter><![CDATA[DataTable rows = Db.____("SELECT * FROM Topics");]]></starter><answer>Table</answer><explanation>Db.Table executes a read query and returns its rows as a DataTable.</explanation></exercise>
+    <exercise id="42" lessonId="14" order="3"><prompt>Complete the SqlCommand collection to which named parameters are added.</prompt><starter><![CDATA[command.____.AddWithValue("@p0", UserId);]]></starter><answer>Parameters</answer><explanation>The Parameters collection carries values separately from the command text.</explanation></exercise>
+    <exercise id="43" lessonId="15" order="1"><prompt>Complete the ownership column that must match the current account in this delete.</prompt><starter><![CDATA[DELETE FROM Notes WHERE Id=@p0 AND ____=@p1]]></starter><answer>UserId</answer><explanation>Matching UserId as well as Id prevents one member from deleting another member's note by guessing an ID.</explanation></exercise>
+    <exercise id="44" lessonId="15" order="2"><prompt>Complete the SQL keyword requiring both the note ID and owner condition.</prompt><starter><![CDATA[UPDATE Notes SET Title=@p0 WHERE Id=@p1 ____ UserId=@p2]]></starter><answer>AND</answer><explanation>AND requires both conditions to be true for a row to be updated.</explanation></exercise>
+    <exercise id="45" lessonId="15" order="3"><prompt>Complete the SQL value representing an optional lesson link that has no selected record.</prompt><starter><![CDATA[INSERT INTO Notes (LessonId, Title) VALUES (____, 'General thought');]]></starter><answer>NULL</answer><explanation>NULL represents the absence of a related lesson, rather than a made-up lesson ID such as zero.</explanation></exercise>
+    <exercise id="46" lessonId="16" order="1"><prompt>Complete the SQL column property that generates a new integer ID on insertion.</prompt><starter><![CDATA[Id int ____(1,1) PRIMARY KEY]]></starter><answer>IDENTITY</answer><explanation>IDENTITY generates new numbers using the starting value and increment shown in parentheses.</explanation></exercise>
+    <exercise id="47" lessonId="16" order="2"><prompt>Complete the database constraint that prevents duplicate learner-and-lesson progress pairs.</prompt><starter><![CDATA[____ (UserId, LessonId)]]></starter><answer>UNIQUE</answer><explanation>A UNIQUE constraint on the pair allows only one progress row for each learner and lesson combination.</explanation></exercise>
+    <exercise id="48" lessonId="16" order="3"><prompt>Complete the SQL function used to find how many progress rows reference a lesson.</prompt><starter><![CDATA[SELECT ____(*) FROM Progress WHERE LessonId=@p0;]]></starter><answer>COUNT</answer><explanation>COUNT returns how many rows match, helping the application explain why a linked lesson cannot be deleted.</explanation></exercise>
+    <exercise id="49" lessonId="17" order="1"><prompt>Complete the DOM method that finds the first element matching a selector.</prompt><starter><![CDATA[const status = document.____('.study-status');]]></starter><answer>querySelector</answer><explanation>querySelector returns the first matching element, or null when no matching element exists.</explanation></exercise>
+    <exercise id="50" lessonId="17" order="2"><prompt>Complete the property that replaces an element's plain text.</prompt><starter><![CDATA[status.____ = 'Ready to practise.';]]></starter><answer>textContent</answer><explanation>textContent treats the value as text rather than parsing it as HTML markup.</explanation></exercise>
+    <exercise id="51" lessonId="17" order="3"><prompt>Complete the script attribute that waits until HTML parsing is finished before execution.</prompt><starter><![CDATA[<script src="scripts/site.js" ____></script>]]></starter><answer>defer</answer><explanation>defer lets the page be parsed before the external script uses its elements.</explanation></exercise>
+    <exercise id="52" lessonId="18" order="1"><prompt>Complete the method used to attach a function to a button event.</prompt><starter><![CDATA[button.____('click', function (event) { });]]></starter><answer>addEventListener</answer><explanation>addEventListener registers the function to run when the specified event happens later.</explanation></exercise>
+    <exercise id="53" lessonId="18" order="2"><prompt>Complete the event name for activating this button.</prompt><starter><![CDATA[button.addEventListener('____', function (event) { });]]></starter><answer>click</answer><explanation>The click event responds to button activation, including normal keyboard activation.</explanation></exercise>
+    <exercise id="54" lessonId="18" order="3"><prompt>Complete the event method that cancels a declined delete action.</prompt><starter><![CDATA[if (!confirm('Delete?')) { event.____(); }]]></starter><answer>preventDefault</answer><explanation>preventDefault cancels the browser's usual action, so the declined form submission does not proceed.</explanation></exercise>
+    <exercise id="55" lessonId="19" order="1"><prompt>Complete the DOM method that finds all controls matching a selector.</prompt><starter><![CDATA[document.____('[data-confirm]')]]></starter><answer>querySelectorAll</answer><explanation>querySelectorAll returns all matching elements so one shared script can enhance several controls.</explanation></exercise>
+    <exercise id="56" lessonId="19" order="2"><prompt>Complete the property used to read the data-confirm attribute.</prompt><starter><![CDATA[const message = button.____.confirm;]]></starter><answer>dataset</answer><explanation>dataset exposes data attributes as JavaScript properties, such as data-confirm becoming dataset.confirm.</explanation></exercise>
+    <exercise id="57" lessonId="19" order="3"><prompt>Complete the method that runs a callback for each matching element.</prompt><starter><![CDATA[document.querySelectorAll('[data-confirm]').____(function (button) { });]]></starter><answer>forEach</answer><explanation>forEach runs the supplied function once for every element in the selected list.</explanation></exercise>
+    <exercise id="58" lessonId="20" order="1"><prompt>Complete the HTML tag name for a built-in expandable answer container.</prompt><starter><![CDATA[<____><summary>Reveal answer</summary><p>Styling.</p></____>]]></starter><answer>details</answer><explanation>The details element provides a keyboard-accessible reveal interaction without custom JavaScript.</explanation></exercise>
+    <exercise id="59" lessonId="20" order="2"><prompt>Complete the child tag name that labels a details element's reveal control.</prompt><starter><![CDATA[<details><____>Reveal answer</____><p>Styling.</p></details>]]></starter><answer>summary</answer><explanation>The summary element is the activatable label that opens or closes its details container.</explanation></exercise>
+    <exercise id="60" lessonId="20" order="3"><prompt>Complete the destination filename for an ordinary back-to-flashcards link.</prompt><starter><![CDATA[<a href="____">Back to flashcards</a>]]></starter><answer>Flashcards.aspx</answer><explanation>A real destination link works without JavaScript and gives a predictable return to the list.</explanation></exercise>
+  </exercises>
+</bytebridge>
+

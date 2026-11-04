@@ -1,0 +1,17 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Results.aspx.cs" Inherits="Results" %>
+<!doctype html>
+<html lang="en">
+<head runat="server"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Results · ByteBridge</title><link rel="stylesheet" href="styles/site.css"><script src="scripts/site.js" defer></script></head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<form id="MainForm" runat="server">
+<asp:HiddenField ID="CsrfToken" runat="server" />
+<header class="site-header"><div class="container header-row"><a class="brand" href="Default.aspx">Byte<span>Bridge</span></a><nav class="desktop-nav" aria-label="Main navigation"><a href="Paths.aspx">Learn</a><a href="Practice.aspx">Skill tree</a><a href="Quizzes.aspx">Quizzes</a><a href="Dashboard.aspx">My progress</a><a href="Login.aspx" id="LoginLink" runat="server">Log in</a></nav><details class="menu"><summary>Menu</summary><nav aria-label="All pages"><a href="Default.aspx">Home</a><a href="Paths.aspx">Lessons</a><a href="Practice.aspx">Skill tree</a><a href="Quizzes.aspx">Quizzes</a><a href="Results.aspx">Results</a><a href="Dashboard.aspx">Dashboard</a><a href="Notes.aspx">Notes</a><a href="Flashcards.aspx">Flashcards</a><a href="Profile.aspx">Profile</a><a href="About.aspx">About</a><a href="Admin.aspx">Admin studio</a><a href="Login.aspx">Log in</a><a href="Register.aspx">Sign up</a></nav></details><asp:Label ID="SignedInName" runat="server" CssClass="signed-in-name" /><asp:LinkButton ID="LogoutButton" runat="server" OnClick="Logout_Click" CssClass="secondary small" CausesValidation="false">Log out</asp:LinkButton></div></header>
+<main id="main" class="container"><asp:Label ID="Notice" runat="server" CssClass="notice" Visible="false" />
+<a class="back-link button secondary small" href="Dashboard.aspx">Back to dashboard</a>
+<div class="page-heading"><h1>Your quiz results</h1><p class="muted">Every attempt is another chance to learn. Take a quiz again whenever you like.</p></div><div class="actions"><a class="button" href="Quizzes.aspx">Choose a quiz</a><a class="button secondary" href="Practice.aspx">Practise a skill</a></div><div class="section-heading"><h2>Your history</h2></div><asp:Label ID="EmptyResults" runat="server" CssClass="empty" Text="Take your first quiz to see a result here." /><section class="panel"><asp:Repeater ID="AttemptList" runat="server" OnItemDataBound="AttemptList_ItemDataBound"><ItemTemplate><article class="record"><div class="row"><div><h3><asp:Label ID="TopicTitle" runat="server" /></h3><p><asp:Label ID="ScoreText" runat="server" /></p><p class="muted"><asp:Label ID="AttemptDate" runat="server" /></p></div><asp:HyperLink ID="RetakeLink" runat="server" CssClass="button secondary small" Text="Try again" /></div></article></ItemTemplate></asp:Repeater></section>
+
+</main>
+<footer class="footer container">ByteBridge. Small steps. Real understanding. <a href="About.aspx">About this project</a></footer>
+<nav class="phone-nav" aria-label="Phone navigation"><a href="Dashboard.aspx"><span aria-hidden="true">⌂</span><span>Today</span></a><a href="Paths.aspx"><span aria-hidden="true">▤</span><span>Learn</span></a><a href="Practice.aspx"><span aria-hidden="true">◇</span><span>Skills</span></a><a href="Quizzes.aspx"><span aria-hidden="true">?</span><span>Quiz</span></a><a href="Profile.aspx"><span aria-hidden="true">○</span><span>Account</span></a></nav>
+</form></body></html>
