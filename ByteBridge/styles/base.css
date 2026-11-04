@@ -1,0 +1,126 @@
+:root {
+    --navy: #17324d;
+    --blue: #2563eb;
+    --paper: #f4f7fb;
+    --ink: #203040;
+    --muted: #52667b;
+    --line: #d7e1ed;
+    --soft-blue: #eaf1ff;
+    --white: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+body {
+    margin: 0;
+}
+
+.skip-link {
+    position: absolute;
+    left: 16px;
+    top: -100px;
+    z-index: 30;
+    background: white;
+    padding: 12px;
+}
+
+    .skip-link:focus {
+        top: 12px;
+    }
+
+a {
+    color: var(--blue);
+    text-underline-offset: 3px;
+}
+
+button, input, textarea, select {
+    font: inherit;
+}
+
+button, summary {
+    cursor: pointer;
+}
+
+button, a, input, select, textarea, summary {
+    -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 4px;
+}
+
+button:disabled {
+    cursor: default;
+    opacity: .55;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+h1, h2, h3 {
+    color: var(--navy);
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+
+h1, h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 400;
+    letter-spacing: -.035em;
+}
+
+h1 {
+    font-size: clamp(2rem, 4.5vw, 3.65rem);
+    margin: 0 0 20px;
+}
+
+h2 {
+    font-size: clamp(1.65rem, 3vw, 2.25rem);
+    margin: 0 0 14px;
+}
+
+h3 {
+    font-size: 1.15rem;
+    margin: 0 0 12px;
+}
+
+p {
+    line-height: 1.7;
+    margin: 0 0 16px;
+    overflow-wrap: anywhere;
+}
+
+ul, ol {
+    padding-left: 23px;
+    line-height: 1.7;
+}
+
+img, svg, video {
+    max-width: 100%;
+}
+
+small, .muted {
+    color: var(--muted);
+}
+
+.container {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+    padding: 0 28px;
+}
+
+main.container {
+    padding-top: 40px;
+    padding-bottom: 70px;
+    min-height: 70vh;
+}

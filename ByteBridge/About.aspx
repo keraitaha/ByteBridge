@@ -1,15 +1,80 @@
-<%@ Page Language="C#" AutoEventWireup="true" CodeFile="About.aspx.cs" Inherits="About" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="About.aspx.cs" Inherits="About" %>
+
 <!doctype html>
 <html lang="en">
-<head runat="server"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>About · ByteBridge</title><link rel="stylesheet" href="styles/site.css"><script src="scripts/site.js" defer></script></head>
+<head runat="server">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>About - ByteBridge</title>
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/forms.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+    <script src="scripts/site.js" defer></script>
+</head>
 <body>
-<a class="skip-link" href="#main">Skip to content</a>
-<form id="MainForm" runat="server">
-<asp:HiddenField ID="CsrfToken" runat="server" />
-<header class="site-header"><div class="container header-row"><a class="brand" href="Default.aspx">Byte<span>Bridge</span></a><nav class="desktop-nav" aria-label="Main navigation"><a href="Paths.aspx">Learn</a><a href="Practice.aspx">Skill tree</a><a href="Quizzes.aspx">Quizzes</a><a href="Dashboard.aspx">My progress</a><a href="Login.aspx" id="LoginLink" runat="server">Log in</a></nav><details class="menu"><summary>Menu</summary><nav aria-label="All pages"><a href="Default.aspx">Home</a><a href="Paths.aspx">Lessons</a><a href="Practice.aspx">Skill tree</a><a href="Quizzes.aspx">Quizzes</a><a href="Results.aspx">Results</a><a href="Dashboard.aspx">Dashboard</a><a href="Notes.aspx">Notes</a><a href="Flashcards.aspx">Flashcards</a><a href="Profile.aspx">Profile</a><a href="About.aspx">About</a><a href="Admin.aspx">Admin studio</a><a href="Login.aspx">Log in</a><a href="Register.aspx">Sign up</a></nav></details><asp:Label ID="SignedInName" runat="server" CssClass="signed-in-name" /><asp:LinkButton ID="LogoutButton" runat="server" OnClick="Logout_Click" CssClass="secondary small" CausesValidation="false">Log out</asp:LinkButton></div></header>
-<main id="main" class="container"><asp:Label ID="Notice" runat="server" CssClass="notice" Visible="false" />
-<a class="back-link" href="Default.aspx">← Back to home</a><h1>A bridge to your first website.</h1><section class="panel"><h2>Learn without the overwhelm</h2><p>ByteBridge teaches HTML, CSS, JavaScript, C#, ASP.NET and SQL through short lessons, practice questions and reflection. Guests can explore; members save their work; administrators maintain content.</p><h2>A little challenge, a little progress</h2><p>Your skill tree rewards new exercises completed, rather than points for repeating the same answer. You can revisit any unlocked skill. Explanation prompts help you practise describing what code does and why.</p><p>Progress is a practice record, not a promise of mastery. Try explaining a code example without looking, then return to anything you cannot yet describe.</p><h2>Built with the same foundations</h2><p>Pages use ASP.NET Web Forms: HTML markup in .aspx, C# events in .aspx.cs, external CSS and JavaScript, and a local SQL Server database. Examples teach these everyday coding patterns.</p><div class="actions"><a href="Paths.aspx" class="button">Explore lessons</a><a href="Register.aspx" class="button secondary">Create an account</a></div></section>
-</main>
-<footer class="footer container">ByteBridge. Small steps. Real understanding. <a href="About.aspx">About this project</a></footer>
-<nav class="phone-nav" aria-label="Phone navigation"><a href="Dashboard.aspx"><span aria-hidden="true">⌂</span><span>Today</span></a><a href="Paths.aspx"><span aria-hidden="true">▤</span><span>Learn</span></a><a href="Practice.aspx"><span aria-hidden="true">◇</span><span>Skills</span></a><a href="Quizzes.aspx"><span aria-hidden="true">?</span><span>Quiz</span></a><a href="Profile.aspx"><span aria-hidden="true">○</span><span>Account</span></a></nav>
-</form></body></html>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <form id="MainForm" runat="server">
+        <asp:HiddenField ID="CsrfToken" runat="server" />
+        <header class="site-header">
+            <div class="container header-row">
+                <a class="brand" href="Default.aspx">Byte<span>Bridge</span></a>
+                <nav class="desktop-nav" aria-label="Main navigation">
+                    <a href="Paths.aspx">Learn</a>
+                    <a href="Practice.aspx">Skill tree</a>
+                    <a href="Quizzes.aspx">Quizzes</a>
+                    <a href="Dashboard.aspx">My progress</a>
+                    <a href="Login.aspx" id="LoginLink" runat="server">Log in</a>
+                </nav>
+                <details class="menu">
+                    <summary>Menu</summary>
+                    <nav aria-label="All pages">
+                        <a href="Default.aspx">Home</a>
+                        <a href="Paths.aspx">Lessons</a>
+                        <a href="Practice.aspx">Skill tree</a>
+                        <a href="Quizzes.aspx">Quizzes</a>
+                        <a href="Results.aspx">Results</a>
+                        <a href="Dashboard.aspx">Dashboard</a>
+                        <a href="Notes.aspx">Notes</a>
+                        <a href="Flashcards.aspx">Flashcards</a>
+                        <a href="Profile.aspx">Profile</a>
+                        <a href="About.aspx">About</a>
+                        <a href="Admin.aspx">Admin studio</a>
+                        <a href="Login.aspx">Log in</a>
+                        <a href="Register.aspx">Sign up</a>
+                    </nav>
+                </details>
+                <asp:Label ID="SignedInName" runat="server" CssClass="signed-in-name" />
+                <asp:LinkButton ID="LogoutButton" runat="server" OnClick="Logout_Click" CssClass="secondary small" CausesValidation="false">Log out</asp:LinkButton>
+            </div>
+        </header>
+        <main id="main" class="container">
+            <asp:Label ID="Notice" runat="server" CssClass="notice" Visible="false" />
+            <a class="back-link" href="Default.aspx">Back to home</a>
+            <h1>A bridge to your first website.</h1>
+            <section class="panel">
+                <h2>Learn without the overwhelm</h2>
+                <p>ByteBridge teaches HTML, CSS, JavaScript, C#, ASP.NET and SQL through short lessons, practice questions and reflection. Guests can explore; members save their work; administrators maintain content.</p>
+                <h2>A little challenge, a little progress</h2>
+                <p>Your skill tree rewards new exercises completed, rather than points for repeating the same answer. You can revisit any unlocked skill. Explanation prompts help you practice describing what code does and why.</p>
+                <p>Progress is a practice record, not a promise of mastery. Try explaining a code example without looking, then return to anything you cannot yet describe.</p>
+                <h2>Built with the same foundations</h2>
+                <p>Pages use ASP.NET Web Forms: HTML markup in .aspx, C# events in .aspx.cs, external CSS and JavaScript, and a local SQL Server database. Examples teach these everyday coding patterns.</p>
+                <div class="actions">
+                    <a href="Paths.aspx" class="button">Explore lessons</a>
+                    <a href="Register.aspx" class="button secondary">Create an account</a>
+                </div>
+            </section>
+        </main>
+        <footer class="footer container">ByteBridge. Small steps. Real understanding. <a href="About.aspx">About this project</a></footer>
+        <nav class="phone-nav" aria-label="Phone navigation">
+            <a href="Dashboard.aspx"><span>Today</span></a>
+            <a href="Paths.aspx"><span>Learn</span></a>
+            <a href="Practice.aspx"><span>Skills</span></a>
+            <a href="Quizzes.aspx"><span aria-hidden="true">?</span><span>Quiz</span></a>
+            <a href="Profile.aspx"><span>Account</span></a>
+        </nav>
+    </form>
+</body>
+</html>

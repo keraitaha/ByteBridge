@@ -10,7 +10,6 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Xml.Linq;
 
-// Small shared database helpers. Every value uses a SQL parameter.
 public static class Db
 {
     private static bool ready;
@@ -51,7 +50,6 @@ public static class Db
         return command;
     }
 
-    // Run once for this website folder; a restart never overwrites saved work.
     public static void Initialize()
     {
         lock (setupLock)
@@ -77,7 +75,6 @@ public static class Db
             }
             else
             {
-                // An extracted copy has a different folder. Attach both of its local files explicitly.
                 using (SqlConnection master = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=60"))
                 {
                     master.Open();
@@ -103,7 +100,6 @@ public static class Db
             connectionString = settings.ConnectionString;
             if (Value("SELECT OBJECT_ID('Users')") == DBNull.Value)
             {
-                // Commit first setup together. A failed seed can be retried safely.
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -180,7 +176,6 @@ public static class Db
     }
 }
 
-// Shared page behaviour, not a new framework. Pages still have their own events.
 public class BasePage : Page
 {
     public int UserId { get; private set; }
@@ -192,12 +187,14 @@ public class BasePage : Page
     {
         Db.Initialize();
         ViewStateUserKey = Session.SessionID;
+
         if (Session["FormToken"] == null)
         {
             byte[] bytes = new byte[24];
             using (RandomNumberGenerator random = RandomNumberGenerator.Create()) random.GetBytes(bytes);
             Session["FormToken"] = Convert.ToBase64String(bytes);
         }
+
         if (Context.User.Identity.IsAuthenticated)
         {
             int id = Number(Context.User.Identity.Name);
@@ -207,8 +204,10 @@ public class BasePage : Page
                 UserId = id; DisplayName = users.Rows[0]["DisplayName"].ToString(); IsAdmin = users.Rows[0]["Role"].ToString() == "Admin";
             }
         }
+
         base.OnInit(e);
     }
+
     protected override void OnPreLoad(EventArgs e)
     {
         HiddenField token = FindDeep(this, "CsrfToken") as HiddenField;
@@ -217,6 +216,7 @@ public class BasePage : Page
         if (token != null) token.Value = (string)Session["FormToken"];
         base.OnPreLoad(e);
     }
+
     protected override void OnPreRender(EventArgs e)
     {
         Control logout = FindDeep(this, "LogoutButton");
@@ -229,6 +229,7 @@ public class BasePage : Page
         Response.Cache.SetNoStore();
         base.OnPreRender(e);
     }
+
     private static Control FindDeep(Control parent, string id)
     {
         if (parent.ID == id) return parent;
@@ -236,17 +237,23 @@ public class BasePage : Page
         { Control found = FindDeep(child, id); if (found != null) return found; }
         return null;
     }
+
     public void RequireLogin() { if (!SignedIn) Go("Login.aspx"); }
+
     public void RequireAdmin() { RequireLogin(); if (!IsAdmin) Go("Default.aspx"); }
+
     public void Go(string url) { Response.Redirect(url, true); }
+
     public int Number(string value) { int result; return int.TryParse(value, out result) ? result : 0; }
+
     public string Safe(object value) { return HttpUtility.HtmlEncode(Convert.ToString(value)); }
+
     public void Message(string text, bool error = false)
     {
         Label notice = FindDeep(this, "Notice") as Label;
         if (notice != null) { notice.Text = Safe(text); notice.CssClass = "notice " + (error ? "error" : "success"); notice.Visible = true; }
     }
+
     protected void Logout_Click(object sender, EventArgs e)
     { FormsAuthentication.SignOut(); Session.Abandon(); Go("Default.aspx"); }
 }
-
