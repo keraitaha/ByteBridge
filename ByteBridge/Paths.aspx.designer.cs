@@ -9,12 +9,6 @@
 
 public partial class Paths
 {
-    protected global::System.Web.UI.HtmlControls.HtmlForm MainForm;
-    protected global::System.Web.UI.WebControls.HiddenField CsrfToken;
-    protected global::System.Web.UI.HtmlControls.HtmlAnchor LoginLink;
-    protected global::System.Web.UI.WebControls.Label SignedInName;
-    protected global::System.Web.UI.WebControls.LinkButton LogoutButton;
-    protected global::System.Web.UI.WebControls.Label Notice;
     protected global::System.Web.UI.WebControls.DropDownList TopicFilter;
     protected global::System.Web.UI.WebControls.Repeater LessonList;
     protected global::System.Web.UI.WebControls.Label EmptyMessage;

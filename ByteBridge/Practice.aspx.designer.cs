@@ -9,12 +9,6 @@
 
 public partial class Practice
 {
-    protected global::System.Web.UI.HtmlControls.HtmlForm MainForm;
-    protected global::System.Web.UI.WebControls.HiddenField CsrfToken;
-    protected global::System.Web.UI.HtmlControls.HtmlAnchor LoginLink;
-    protected global::System.Web.UI.WebControls.Label SignedInName;
-    protected global::System.Web.UI.WebControls.LinkButton LogoutButton;
-    protected global::System.Web.UI.WebControls.Label Notice;
     protected global::System.Web.UI.WebControls.Literal XpCount;
     protected global::System.Web.UI.WebControls.Literal SkillCount;
     protected global::System.Web.UI.WebControls.Literal ExerciseCount;

@@ -13,12 +13,22 @@ public partial class Admin : BasePage
     {
         RequireAdmin();
         bool manage = Mode == "topics" || Mode == "lessons" || Mode == "questions";
-        OverviewPanel.Visible = !manage;
+        bool users = Mode == "users";
+        OverviewPanel.Visible = !manage && !users;
         ManagePanel.Visible = manage;
+        UserPanel.Visible = users;
         TopicEditor.Visible = Mode == "topics";
         LessonEditor.Visible = Mode == "lessons";
         QuestionEditor.Visible = Mode == "questions";
         if (IsPostBack) return;
+
+        if (users)
+        {
+            BindUsers();
+            if (Request.QueryString["saved"] == "1") Message("User updated.");
+            if (Request.QueryString["deleted"] == "1") Message("User deleted.");
+            return;
+        }
 
         if (!manage)
         {
@@ -38,6 +48,19 @@ public partial class Admin : BasePage
         BindRecords();
         if (Request.QueryString["saved"] == "1") Message("Record saved.");
         if (Request.QueryString["deleted"] == "1") Message("Record deleted.");
+    }
+
+    void BindUsers()
+    {
+        DataTable rows = Db.Table("SELECT Id,Email,DisplayName,Role FROM Users ORDER BY Role,DisplayName,Id");
+        EmptyUsers.Visible = rows.Rows.Count == 0;
+        UserList.DataSource = rows;
+        UserList.DataBind();
+    }
+
+    void UsersSaved()
+    {
+        Go("Admin.aspx?mode=users&saved=1");
     }
 
     void FillTopics(DropDownList list)
@@ -368,6 +391,100 @@ public partial class Admin : BasePage
         catch (SqlException)
         {
             Message("This record still has related data and cannot be deleted.", true);
+        }
+    }
+
+    protected void UserList_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem) return;
+
+        DataRowView row = (DataRowView)e.Item.DataItem;
+        int id = Convert.ToInt32(row["Id"]);
+        string role = row["Role"].ToString();
+        bool isSelf = id == UserId;
+
+        ((Label)e.Item.FindControl("UserName")).Text = Safe(row["DisplayName"]);
+        ((Label)e.Item.FindControl("UserEmail")).Text = Safe(row["Email"]);
+        ((Label)e.Item.FindControl("UserRole")).Text = isSelf ? role + " (you)" : role;
+
+        LinkButton promote = (LinkButton)e.Item.FindControl("PromoteLink");
+        LinkButton demote = (LinkButton)e.Item.FindControl("DemoteLink");
+        LinkButton delete = (LinkButton)e.Item.FindControl("DeleteUser");
+
+        promote.CommandArgument = id.ToString();
+        demote.CommandArgument = id.ToString();
+        delete.CommandArgument = id.ToString();
+
+        promote.Visible = role == "Member";
+        demote.Visible = role == "Admin" && !isSelf;
+        delete.Visible = !isSelf;
+    }
+
+    protected void UserList_ItemCommand(object source, RepeaterCommandEventArgs e)
+    {
+        RequireAdmin();
+        if (Mode != "users") return;
+
+        int id = Number(e.CommandArgument.ToString());
+        if (id == 0 || Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Users WHERE Id=@p0", id)) == 0)
+        {
+            Message("User not found.", true);
+            return;
+        }
+
+        if (id == UserId)
+        {
+            Message("You cannot change or delete your own account here.", true);
+            return;
+        }
+
+        if (e.CommandName == "MakeAdmin")
+        {
+            Db.Run("UPDATE Users SET Role='Admin' WHERE Id=@p0", id);
+            UsersSaved();
+            return;
+        }
+
+        if (e.CommandName == "MakeMember")
+        {
+            if (Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Users WHERE Role='Admin'")) <= 1)
+            {
+                Message("There must be at least one administrator.", true);
+                return;
+            }
+
+            Db.Run("UPDATE Users SET Role='Member' WHERE Id=@p0", id);
+            UsersSaved();
+            return;
+        }
+
+        if (e.CommandName == "RemoveUser")
+        {
+            if (Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Progress WHERE UserId=@p0", id)) > 0
+                || Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Attempts WHERE UserId=@p0", id)) > 0
+                || Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Notes WHERE UserId=@p0", id)) > 0
+                || Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Flashcards WHERE UserId=@p0", id)) > 0
+                || Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM PracticeAttempts WHERE UserId=@p0", id)) > 0
+                || Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Reflections WHERE UserId=@p0", id)) > 0)
+            {
+                Message("This user has saved progress, quiz attempts, notes or flashcards and cannot be deleted.", true);
+                return;
+            }
+
+            try
+            {
+                if (Db.Run("DELETE FROM Users WHERE Id=@p0", id) == 0)
+                {
+                    Message("User not found.", true);
+                    return;
+                }
+
+                Go("Admin.aspx?mode=users&deleted=1");
+            }
+            catch (SqlException)
+            {
+                Message("This user still has related data and cannot be deleted.", true);
+            }
         }
     }
 }

@@ -9,21 +9,10 @@
 
 public partial class Dashboard
 {
-    protected global::System.Web.UI.HtmlControls.HtmlForm MainForm;
-    protected global::System.Web.UI.WebControls.HiddenField CsrfToken;
-    protected global::System.Web.UI.HtmlControls.HtmlAnchor LoginLink;
-    protected global::System.Web.UI.WebControls.Label SignedInName;
-    protected global::System.Web.UI.WebControls.LinkButton LogoutButton;
-    protected global::System.Web.UI.WebControls.Label Notice;
     protected global::System.Web.UI.WebControls.Label Welcome;
     protected global::System.Web.UI.WebControls.Label Completion;
     protected global::System.Web.UI.WebControls.Label LatestScore;
     protected global::System.Web.UI.WebControls.Label Experience;
-    protected global::System.Web.UI.WebControls.Panel AdminPanel;
-    protected global::System.Web.UI.WebControls.Label AdminTopics;
-    protected global::System.Web.UI.WebControls.Label AdminLessons;
-    protected global::System.Web.UI.WebControls.Label AdminQuestions;
-    protected global::System.Web.UI.WebControls.Label AdminMembers;
     protected global::System.Web.UI.WebControls.Label NoteCount;
     protected global::System.Web.UI.WebControls.Repeater ProgressList;
 }

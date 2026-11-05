@@ -17,15 +17,6 @@ public partial class Dashboard : BasePage
         int explained = Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Reflections WHERE UserId=@p0", UserId));
         Experience.Text = (correct * 10 + explained * 5).ToString();
         NoteCount.Text = Db.Value("SELECT COUNT(*) FROM Notes WHERE UserId=@p0", UserId).ToString();
-
-        AdminPanel.Visible = IsAdmin;
-        if (IsAdmin)
-        {
-            AdminTopics.Text = Db.Value("SELECT COUNT(*) FROM Topics").ToString();
-            AdminLessons.Text = Db.Value("SELECT COUNT(*) FROM Lessons").ToString();
-            AdminQuestions.Text = Db.Value("SELECT COUNT(*) FROM Questions").ToString();
-            AdminMembers.Text = Db.Value("SELECT COUNT(*) FROM Users").ToString();
-        }
         ProgressList.DataSource = Db.Table("SELECT l.Id,l.Title,p.Confidence,p.CompletedAt FROM Lessons l LEFT JOIN Progress p ON p.LessonId=l.Id AND p.UserId=@p0 ORDER BY l.TopicId,l.SortOrder,l.Id", UserId);
         ProgressList.DataBind();
     }

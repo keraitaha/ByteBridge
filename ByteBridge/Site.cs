@@ -225,6 +225,8 @@ public class BasePage : Page
         if (name != null) { name.Visible = SignedIn; name.Text = Safe(DisplayName); }
         Control login = FindDeep(this, "LoginLink");
         if (login != null) login.Visible = !SignedIn;
+        Control admin = FindDeep(this, "NavAdminLink");
+        if (admin != null) admin.Visible = IsAdmin;
         if (SignedIn) Response.Cache.SetCacheability(HttpCacheability.NoCache);
         Response.Cache.SetNoStore();
         base.OnPreRender(e);
