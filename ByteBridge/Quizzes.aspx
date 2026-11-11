@@ -2,7 +2,7 @@
 
 <asp:Content ID="TitleBlock" ContentPlaceHolderID="TitleContent" runat="server">Quizzes - ByteBridge</asp:Content>
 <asp:Content ID="MainBlock" ContentPlaceHolderID="MainContent" runat="server">
-    <a class="back-link" href="Paths.aspx">Back to learning</a>
+    <a class="back-link" href="Paths.aspx">Back to lessons</a>
     <asp:Panel ID="CatalogPanel" runat="server">
         <h1>A quick check of what you know.</h1>
         <p>No timer. No pressure. Every attempt is a chance to learn.</p>

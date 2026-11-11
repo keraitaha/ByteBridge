@@ -39,8 +39,6 @@ public static class Db
         using (SqlCommand command = Command(connection, sql, values))
         { connection.Open(); return command.ExecuteNonQuery(); }
     }
-    public static int Add(string sql, params object[] values)
-    { return Convert.ToInt32(Value(sql + "; SELECT CAST(SCOPE_IDENTITY() AS int);", values)); }
 
     private static SqlCommand Command(SqlConnection connection, string sql, object[] values)
     {
@@ -153,11 +151,13 @@ public static class Db
         string saltText = Convert.ToBase64String(salt);
         return new object[] { email, name, saltText, PasswordHash(password, saltText), role };
     }
+
     public static string PasswordHash(string password, string salt)
     {
         using (Rfc2898DeriveBytes hash = new Rfc2898DeriveBytes(password, Convert.FromBase64String(salt), 100000, HashAlgorithmName.SHA256))
             return Convert.ToBase64String(hash.GetBytes(32));
     }
+
     public static bool PasswordMatches(string password, string salt, string expected)
     {
         byte[] actual = Convert.FromBase64String(PasswordHash(password, salt));
@@ -225,6 +225,8 @@ public class BasePage : Page
         if (name != null) { name.Visible = SignedIn; name.Text = Safe(DisplayName); }
         Control login = FindDeep(this, "LoginLink");
         if (login != null) login.Visible = !SignedIn;
+        Control profile = FindDeep(this, "NavProfileLink");
+        if (profile != null) profile.Visible = SignedIn;
         Control admin = FindDeep(this, "NavAdminLink");
         if (admin != null) admin.Visible = IsAdmin;
         if (SignedIn) Response.Cache.SetCacheability(HttpCacheability.NoCache);

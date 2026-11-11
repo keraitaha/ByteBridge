@@ -2,7 +2,6 @@
 
 <asp:Content ID="TitleBlock" ContentPlaceHolderID="TitleContent" runat="server">Dashboard - ByteBridge</asp:Content>
 <asp:Content ID="MainBlock" ContentPlaceHolderID="MainContent" runat="server">
-    <a class="back-link button secondary small" href="Dashboard.aspx">Back to dashboard</a>
     <div class="page-heading">
         <h1>
             <asp:Label ID="Welcome" runat="server" /></h1>

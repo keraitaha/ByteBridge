@@ -22,10 +22,12 @@
             <div class="container header-row">
                 <a class="brand" href="Default.aspx">Byte<span>Bridge</span></a>
                 <nav class="desktop-nav">
+                    <a href="Default.aspx">Home</a>
                     <a href="Paths.aspx">Learn</a>
                     <a href="Practice.aspx">Skill tree</a>
                     <a href="Quizzes.aspx">Quizzes</a>
                     <a href="Dashboard.aspx">My progress</a>
+                    <a href="Profile.aspx" id="NavProfileLink" runat="server">Profile</a>
                     <a href="Admin.aspx" id="NavAdminLink" runat="server">Admin</a>
                     <a href="Login.aspx" id="LoginLink" runat="server">Log in</a>
                 </nav>
@@ -60,7 +62,7 @@
             <a href="Dashboard.aspx"><span>Today</span></a>
             <a href="Paths.aspx"><span>Learn</span></a>
             <a href="Practice.aspx"><span>Skills</span></a>
-            <a href="Quizzes.aspx"><span>?</span><span>Quiz</span></a>
+            <a href="Quizzes.aspx"><span>Quiz</span></a>
             <a href="Profile.aspx"><span>Account</span></a>
         </nav>
     </form>
