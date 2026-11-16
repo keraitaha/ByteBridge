@@ -357,7 +357,10 @@ public partial class Admin : BasePage
         ((Label)e.Item.FindControl("RecordTitle")).Text = Safe(row["Title"]);
         ((Label)e.Item.FindControl("RecordSummary")).Text = Safe(row["Summary"]);
         ((HyperLink)e.Item.FindControl("EditLink")).NavigateUrl = "Admin.aspx?mode=" + Mode + "&edit=" + row["Id"];
-        ((LinkButton)e.Item.FindControl("DeleteLink")).CommandArgument = row["Id"].ToString();
+        LinkButton delete = (LinkButton)e.Item.FindControl("DeleteLink");
+        delete.CommandArgument = row["Id"].ToString();
+        if (Mode == "topics")
+            delete.Attributes["data-confirm"] = "Delete this topic? Its lessons, questions, quiz attempts, flashcard links and all related student progress will also be permanently deleted.";
     }
 
     protected void RecordList_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -366,11 +369,6 @@ public partial class Admin : BasePage
         if (e.CommandName != "Remove" || (Mode != "topics" && Mode != "lessons" && Mode != "questions")) return;
 
         int id = Number(e.CommandArgument.ToString());
-        if (Mode == "topics" && (Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Lessons WHERE TopicId=@p0", id)) > 0 || Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Questions WHERE TopicId=@p0", id)) > 0 || Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Attempts WHERE TopicId=@p0", id)) > 0 || Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Flashcards WHERE TopicId=@p0", id)) > 0))
-        {
-            Message("Remove related lessons, questions and flashcard links before deleting this topic. Saved quiz attempts also protect it.", true);
-            return;
-        }
 
         if (Mode == "lessons" && (Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Progress WHERE LessonId=@p0", id)) > 0 || Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Notes WHERE LessonId=@p0", id)) > 0 || Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Exercises WHERE LessonId=@p0", id)) > 0 || Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Lessons WHERE PrerequisiteId=@p0", id)) > 0 || Convert.ToInt32(Db.Value("SELECT COUNT(*) FROM Reflections WHERE LessonId=@p0", id)) > 0))
         {
@@ -380,6 +378,15 @@ public partial class Admin : BasePage
 
         try
         {
+            if (Mode == "topics")
+            {
+                // Clear prerequisite links between this topic's lessons first; that self-reference
+                // cannot cascade, so it would otherwise block the delete. Every other related row
+                // (lessons, questions, attempts, flashcards, and in turn their progress, notes,
+                // reflections, exercises and practice attempts) is removed by ON DELETE CASCADE.
+                Db.Run("UPDATE Lessons SET PrerequisiteId=NULL WHERE TopicId=@p0", id);
+            }
+
             if (Db.Run("DELETE FROM " + TableName() + " WHERE Id=@p0", id) == 0)
             {
                 Message("Record not found.", true);
